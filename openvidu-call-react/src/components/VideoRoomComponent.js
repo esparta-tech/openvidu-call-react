@@ -3,8 +3,6 @@ import axios from 'axios';
 import './VideoRoomComponent.css';
 import { OpenVidu } from 'openvidu-browser';
 import StreamComponent from './stream/StreamComponent';
-import DialogExtensionComponent from './dialog-extension/DialogExtension';
-import ChatComponent from './chat/ChatComponent';
 
 import OpenViduLayout from '../layout/openvidu-layout';
 import UserModel from '../models/user-model';
@@ -15,10 +13,6 @@ var localUser = new UserModel();
 class VideoRoomComponent extends Component {
     constructor(props) {
         super(props);
-        this.OPENVIDU_SERVER_URL = this.props.openviduServerUrl
-            ? this.props.openviduServerUrl
-            : 'https://' + window.location.hostname + ':4443';
-        this.OPENVIDU_SERVER_SECRET = this.props.openviduSecret ? this.props.openviduSecret : 'MY_SECRET';
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
         let sessionName = this.props.sessionName ? this.props.sessionName : 'SessionA';
@@ -30,6 +24,7 @@ class VideoRoomComponent extends Component {
             localUser: undefined,
             subscribers: [],
             chatDisplay: 'none',
+            containerStyle: this.props.containerStyle
         };
 
         this.joinSession = this.joinSession.bind(this);
@@ -100,16 +95,7 @@ class VideoRoomComponent extends Component {
             console.log('token received: ', this.props.token);
             this.connect(this.props.token);
         } else {
-            this.getToken().then((token) => {
-                console.log(token);
-                this.connect(token);
-            }).catch((error) => {
-                if(this.props.error){
-                    this.props.error({ error: error.error, messgae: error.message, code: error.code, status: error.status });
-                }
-                console.log('There was an error getting the token:', error.code, error.message);
-                alert('There was an error getting the token:', error.message);
-              });
+            alert('There was an error getting the token.');
         }
     }
 
@@ -162,6 +148,9 @@ class VideoRoomComponent extends Component {
                 this.updateLayout();
                 publisher.videos[0].video.parentElement.classList.remove('custom-class');
             });
+        },
+        () => {
+            this.toggleFullscreen();
         });
     }
 
@@ -169,7 +158,7 @@ class VideoRoomComponent extends Component {
         const mySession = this.state.session;
 
         if (mySession) {
-            mySession.disconnect();
+            // mySession.disconnect();
         }
 
         // Empty all properties...
@@ -444,7 +433,9 @@ class VideoRoomComponent extends Component {
         var chatDisplay = { display: this.state.chatDisplay };
 
         return (
-            <div className="container" id="container">
+            <div className="container" id="container"
+                style={this.state.containerStyle}
+            >
                 <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
@@ -458,8 +449,6 @@ class VideoRoomComponent extends Component {
                     toggleChat={this.toggleChat}
                 />
 
-                <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
-
                 <div id="layout" className="bounds">
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         <div className="OT_root OT_publisher custom-class" id="localUser">
@@ -471,93 +460,9 @@ class VideoRoomComponent extends Component {
                             <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
                         </div>
                     ))}
-                    {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-                        <div className="OT_root OT_publisher custom-class" style={chatDisplay}>
-                            <ChatComponent
-                                user={localUser}
-                                chatDisplay={this.state.chatDisplay}
-                                close={this.toggleChat}
-                                messageReceived={this.checkNotification}
-                            />
-                        </div>
-                    )}
                 </div>
             </div>
         );
-    }
-
-    /**
-     * --------------------------
-     * SERVER-SIDE RESPONSIBILITY
-     * --------------------------
-     * These methods retrieve the mandatory user token from OpenVidu Server.
-     * This behaviour MUST BE IN YOUR SERVER-SIDE IN PRODUCTION (by using
-     * the API REST, openvidu-java-client or openvidu-node-client):
-     *   1) Initialize a session in OpenVidu Server	(POST /api/sessions)
-     *   2) Generate a token in OpenVidu Server		(POST /api/tokens)
-     *   3) The token must be consumed in Session.connect() method
-     */
-
-    getToken() {
-        return this.createSession(this.state.mySessionId).then((sessionId) => this.createToken(sessionId));
-    }
-
-    createSession(sessionId) {
-        return new Promise((resolve, reject) => {
-            var data = JSON.stringify({ customSessionId: sessionId });
-            axios
-                .post(this.OPENVIDU_SERVER_URL + '/api/sessions', data, {
-                    headers: {
-                        Authorization: 'Basic ' + btoa('OPENVIDUAPP:' + this.OPENVIDU_SERVER_SECRET),
-                        'Content-Type': 'application/json',
-                    },
-                })
-                .then((response) => {
-                    console.log('CREATE SESION', response);
-                    resolve(response.data.id);
-                })
-                .catch((response) => {
-                    var error = Object.assign({}, response);
-                    if (error.response && error.response.status === 409) {
-                        resolve(sessionId);
-                    } else {
-                        console.log(error);
-                        console.warn(
-                            'No connection to OpenVidu Server. This may be a certificate error at ' + this.OPENVIDU_SERVER_URL,
-                        );
-                        if (
-                            window.confirm(
-                                'No connection to OpenVidu Server. This may be a certificate error at "' +
-                                    this.OPENVIDU_SERVER_URL +
-                                    '"\n\nClick OK to navigate and accept it. ' +
-                                    'If no certificate warning is shown, then check that your OpenVidu Server is up and running at "' +
-                                    this.OPENVIDU_SERVER_URL +
-                                    '"',
-                            )
-                        ) {
-                            window.location.assign(this.OPENVIDU_SERVER_URL + '/accept-certificate');
-                        }
-                    }
-                });
-        });
-    }
-
-    createToken(sessionId) {
-        return new Promise((resolve, reject) => {
-            var data = JSON.stringify({ session: sessionId });
-            axios
-                .post(this.OPENVIDU_SERVER_URL + '/api/tokens', data, {
-                    headers: {
-                        Authorization: 'Basic ' + btoa('OPENVIDUAPP:' + this.OPENVIDU_SERVER_SECRET),
-                        'Content-Type': 'application/json',
-                    },
-                })
-                .then((response) => {
-                    console.log('TOKEN', response);
-                    resolve(response.data.token);
-                })
-                .catch((error) => reject(error));
-        });
     }
 }
 export default VideoRoomComponent;

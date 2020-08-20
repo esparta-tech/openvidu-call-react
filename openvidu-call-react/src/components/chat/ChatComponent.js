@@ -14,7 +14,6 @@ export default class ChatComponent extends Component {
             messageList: [],
             message: '',
         };
-        this.chatScroll = React.createRef();
 
         this.handleChange = this.handleChange.bind(this);
         this.handlePressKey = this.handlePressKey.bind(this);
@@ -37,7 +36,6 @@ export default class ChatComponent extends Component {
                 this.props.messageReceived();
             }, 50);
             this.setState({ messageList: messageList });
-            this.scrollToBottom();
         });
     }
 
@@ -66,14 +64,6 @@ export default class ChatComponent extends Component {
         this.setState({ message: '' });
     }
 
-    scrollToBottom() {
-        setTimeout(() => {
-            try {
-                this.chatScroll.current.scrollTop = this.chatScroll.current.scrollHeight;
-            } catch (err) {}
-        }, 20);
-    }
-
     close() {
         this.props.close(undefined);
     }
@@ -89,29 +79,6 @@ export default class ChatComponent extends Component {
                             <HighlightOff color="secondary" />
                         </IconButton>
                     </div>
-                    <div className="message-wrap" ref={this.chatScroll}>
-                        {this.state.messageList.map((data, i) => (
-                            <div
-                                key={i}
-                                id="remoteUsers"
-                                className={
-                                    'message' + (data.connectionId !== this.props.user.getConnectionId() ? ' left' : ' right')
-                                }
-                            >
-                                <canvas id={'userImg-' + i} width="60" height="60" className="user-img" />
-                                <div className="msg-detail">
-                                    <div className="msg-info">
-                                        <p> {data.nickname}</p>
-                                    </div>
-                                    <div className="msg-content">
-                                        <span className="triangle" />
-                                        <p className="text">{data.message}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
                     <div id="messageInput">
                         <input
                             placeholder="Send a messge"

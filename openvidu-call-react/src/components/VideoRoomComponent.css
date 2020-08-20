@@ -11,7 +11,8 @@
 
 .toolbar{
   min-height: 40px !important;
-
+  align-items: center;
+  justify-content: center;
 }
 
 #titleContent{
@@ -28,14 +29,21 @@
 	height: 40px !important;
 	text-align: center;
 	margin: auto;
-    min-width: 400px;
+  min-width: 400px;
+  display: flex;
+  flex-direction: row;
+  flex: auto;
+  justify-content: center;
 }
 .navButton{
-	height: 40px !important;
-	width : 40px !important;
+  font-size: 24px;
+  width: 60px !important;
+  margin-left: 8px;
+  margin-right: 8px;
+  align-self: center;
+  z-index:999999;
 }
-
-#navChatButton{
+#navChatButton {
   position: absolute;
   right: 0;
 }

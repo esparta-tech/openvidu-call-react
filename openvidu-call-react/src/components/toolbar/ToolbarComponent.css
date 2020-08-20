@@ -11,8 +11,8 @@
   }
   .toolbar{
     padding: 0 !important;
+    width: 100%;
   }
-  
   .headerLight{
     color: #706969 !important;
     background-color: #eeeeee !important;
@@ -28,12 +28,6 @@
     right: 0;
     min-width: 400px;
   }
-  #navChatButton {
-    position: absolute;
-    right: 10px;
-    top: none;
-  }
-  
   #titleContent{
     max-width: 100px;
     background-color: #494949;
