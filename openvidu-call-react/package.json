@@ -22,10 +22,10 @@
     "private": true,
     "scripts": {
         "build": "react-scripts build",
-        "build:openvidu-react": "npm install --prefix ../library/ && node library-copy.js && cd ../library && npm run create-library",
+        "build:openvidu-react": "npm install --prefix ../library/ && sh library-copy.sh && cd ../library && npm run create-library",
         "eject": "react-scripts eject",
         "start": "react-scripts start",
-        "test": "react-scripts test --env=jsdom"
+        "test": "react-scripts test"
     },
     "version": "2.15.0"
 }

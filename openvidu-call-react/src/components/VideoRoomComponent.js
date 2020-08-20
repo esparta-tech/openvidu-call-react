@@ -23,8 +23,7 @@ class VideoRoomComponent extends Component {
             session: undefined,
             localUser: undefined,
             subscribers: [],
-            chatDisplay: 'none',
-            containerStyle: this.props.containerStyle
+            chatDisplay: 'none'
         };
 
         this.joinSession = this.joinSession.bind(this);
@@ -109,7 +108,7 @@ class VideoRoomComponent extends Component {
                 this.connectWebCam();
             })
             .catch((error) => {
-                if(this.props.error){
+                if (this.props.error) {
                     this.props.error({ error: error.error, messgae: error.message, code: error.code, status: error.status });
                 }
                 alert('There was an error connecting to the session:', error.message);
@@ -149,9 +148,9 @@ class VideoRoomComponent extends Component {
                 publisher.videos[0].video.parentElement.classList.remove('custom-class');
             });
         },
-        () => {
-            this.toggleFullscreen();
-        });
+            () => {
+                this.toggleFullscreen();
+            });
     }
 
     leaveSession() {
@@ -433,9 +432,7 @@ class VideoRoomComponent extends Component {
         var chatDisplay = { display: this.state.chatDisplay };
 
         return (
-            <div className="container" id="container"
-                style={this.state.containerStyle}
-            >
+            <div className="container" id="container" style={this.props.containerStyle}>
                 <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
