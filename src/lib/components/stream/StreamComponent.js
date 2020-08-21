@@ -19,9 +19,9 @@ export default class StreamComponent extends Component {
     render() {
         return (
             <div className="OT_widget-container">
-                <div className="nickname">
+                {/*<div className="nickname">
                     <span id="nickname">{this.props.user.getNickname()}</span>
-                </div>
+                </div>*/}
                 {this.props.user !== undefined && this.props.user.getStreamManager() !== undefined ? (
                     <div className="streamComponent">
                         <OvVideoComponent user={this.props.user} mutedSound={this.state.mutedSound} />

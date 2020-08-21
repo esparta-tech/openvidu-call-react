@@ -15,7 +15,8 @@
     "dist",
     "src",
     "public",
-    "README.md"
+    "README.md",
+    ".babelrc"
   ],
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.30",
