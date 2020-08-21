@@ -1,19 +1,51 @@
 {
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
   "name": "openvidu-call-react",
   "version": "1.0.0",
-  "description": "[![License badge](https://img.shields.io/badge/license-Apache2-orange.svg)](http://www.apache.org/licenses/LICENSE-2.0) [![Documentation Status](https://readthedocs.org/projects/openviduio-docs/badge/?version=stable)](https://docs.openvidu.io/en/stable/?badge=stable) [![Docker badge](https://img.shields.io/docker/pulls/fiware/orion.svg)](https://hub.docker.com/r/openvidu/classroom-demo/) [![Support badge](https://img.shields.io/badge/support-sof-yellowgreen.svg)](https://groups.google.com/forum/#!forum/openvidu)",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "",
+  "private": true,
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "1.2.30",
+    "@fortawesome/free-solid-svg-icons": "5.14.0",
+    "@fortawesome/react-fontawesome": "0.1.11",
+    "@material-ui/core": "4.9.10",
+    "@material-ui/icons": "4.9.1",
+    "axios": "0.19.2",
+    "jquery": "3.5.0",
+    "openvidu-browser": "2.15.0",
+    "typeface-roboto": "0.0.75"
+  },
+  "devDependencies": {
+    "babel-cli": "6.26.0",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-scripts": "1.1.5"
+  },
+  "peerDependencies": {
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/esparta-tech/openvidu-call-react.git"
   },
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/esparta-tech/openvidu-call-react/issues"
-  },
-  "homepage": "https://github.com/esparta-tech/openvidu-call-react#readme"
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "rm -rf dist && NODE_ENV=production babel src/lib --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
+    "eject": "react-scripts eject",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
+  }
 }
