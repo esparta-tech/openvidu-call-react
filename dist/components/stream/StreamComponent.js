@@ -37,15 +37,6 @@ var StreamComponent = function (_Component) {
             return React.createElement(
                 'div',
                 { className: 'OT_widget-container' },
-                React.createElement(
-                    'div',
-                    { className: 'nickname' },
-                    React.createElement(
-                        'span',
-                        { id: 'nickname' },
-                        this.props.user.getNickname()
-                    )
-                ),
                 this.props.user !== undefined && this.props.user.getStreamManager() !== undefined ? React.createElement(
                     'div',
                     { className: 'streamComponent' },
