@@ -4,6 +4,7 @@
     position: absolute;
     z-index: 999;
     color: #ffffff;
+    display: none;
 }
 .form-control {
     color: black;

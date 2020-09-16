@@ -6,7 +6,7 @@
     "not op_mini all"
   ],
   "name": "openvidu-call-react",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "",
   "private": true,
   "main": "dist/index.js",
